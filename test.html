@@ -1,4 +1,4 @@
-<html><body><script src="cycle.js"></script>
+<html><body><script src="json_parse.js"></script>
 <pre><p id=output></p>
 <script>
 function out(s) {
@@ -6,27 +6,10 @@ function out(s) {
 }
 
 function doTest() {
-    var i, o, s, jsonObj;
     try {
-        o = {
-            number: 98.6,
-            string: 'Why is it called string?'
-        };
-        o.object = o;
-        o.array = [o];
-        out(JSON.stringify(JSON.decycle(
-            [o, o],
-            function (value) {
-                if (typeof value === 'string') {
-                    return 'because';
-                } else {
-                    return value;
-                }
-            }
-        )));
-
+        var arr = json_parse("['123',123]")
+        console.log(arr)
     } catch (e) {
-        debugger;
         out("    name: " + e.name);
         out(" message: " + e.message);
     }
