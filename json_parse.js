@@ -186,6 +186,34 @@ var json_parse = (function () {
                 }
             }
         }
+        if (ch === "'") {
+            while (next()) {
+                if (ch === "'") {
+                    next()
+                    return value
+                }
+                if (ch === '\\') {
+                    next()
+                    if (ch === 'u') {
+                        uffff = 0
+                        for (i = 0; i < 4; i += 1) {
+                            hex = parseInt(next(), 16)
+                            if (!isFinite(hex)) {
+                                break
+                            }
+                            uffff = uffff * 16 + hex
+                        }
+                        value += String.fromCharCode(uffff)
+                    } else if (typeof escapee[ch] === 'string') {
+                        value += escapee[ch]
+                    } else {
+                        break
+                    }
+                } else {
+                    value += ch
+                }
+            }
+        }
         error("Bad string");
     };
 
@@ -301,6 +329,8 @@ var json_parse = (function () {
         case "[":
             return array();
         case "\"":
+            return string();
+        case "'":
             return string();
         case "-":
             return number();
